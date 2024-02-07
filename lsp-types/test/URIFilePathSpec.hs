@@ -64,6 +64,15 @@ testWindowsUri = Uri $ pack "file:///c:/Users/myself/example.hs"
 testWindowsFilePath :: FilePath
 testWindowsFilePath = "c:\\Users\\myself\\example.hs"
 
+testWindowsWSLUri :: Uri
+testWindowsWSLUri = Uri $ pack "file:///wsl.localhost/Ubuntu/home/example.hs"
+
+testWindowsWSLUriNorm :: NormalizedUri
+testWindowsWSLUriNorm = NormalizedUri 6947023982693692785 $ pack "file:///wsl.localhost/Ubuntu/home/example.hs"
+
+testWindowsWSLFilePath :: FilePath
+testWindowsWSLFilePath = "\\\\wsl.localhost\\Ubuntu\\home\\example.hs"
+
 platformAwareUriFilePathSpec :: Spec
 platformAwareUriFilePathSpec = do
   it "converts a URI to a POSIX file path" $ do
@@ -81,6 +90,10 @@ platformAwareUriFilePathSpec = do
   it "converts a Windows file path to a URI" $ do
     let theUri = platformAwareFilePathToUri windowsOS testWindowsFilePath
     theUri `shouldBe` testWindowsUri
+
+  it "converts a Windows WSL file path to a URI" $ do
+    let theUri = filePathToUri testWindowsWSLFilePath
+    theUri `shouldBe` testWindowsWSLUri
 
   it "converts a POSIX file path to a URI" $ do
     let theFilePath = platformAwareFilePathToUri "posix" "./Functional.hs"
